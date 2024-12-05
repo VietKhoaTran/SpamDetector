@@ -1,7 +1,6 @@
 import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 messages = pd.read_csv('Projects/data/SMSSpamCollection', sep = '\t', names = ['label', 'message'])
-# sep = '/t': specifies the seperator used in the file, which is tab in this case
 
 import re
 import nltk
@@ -9,7 +8,7 @@ import nltk
 from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
 ps = PorterStemmer()
-result = re.sub('[^a-zA-z]', ' ', messages['message'][1]) # ^ for negating the character set
+result = re.sub('[^a-zA-z]', ' ', messages['message'][1]) 
 def clearing(messages):
     review = re.sub('[^a-zA-Z]', ' ', messages)
     review = review.lower().split()
@@ -33,10 +32,12 @@ x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_
 Naive_bayes = MultinomialNB()
 Naive_bayes.fit(x_train, y_train)
 y_pred = Naive_bayes.predict(x_test)
+
 new_message = 'Had your contract mobile 11 Mnths? Latest Motorola, Nokia etc. all FREE! Double Mins & Text on Orange tariffs. TEXT YES for callback, no to remove from records.'
-new_message = clearing(new_message)
-new_message = vectorizer.transform([new_message]).toarray()
-predicted_category = Naive_bayes.predict(new_message)
+new_message_vector = clearing(new_message)
+new_message_vector = vectorizer.transform([new_message_vector]).toarray()
+
+predicted_category = Naive_bayes.predict(new_message_vector)
 accuracy = accuracy_score(y_test, y_pred)
 print(f"Accuracy: {accuracy*100:.2f}%")
 print(f"Predicted category of '{new_message}' is {'spam' if predicted_category[0] == 1 else 'ham'}")
